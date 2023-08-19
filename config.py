@@ -2,7 +2,8 @@ import numpy as np
 
 
 # MODEL_PATH = "/users/surikov/models/rugpt3small_based_on_gpt2"
-MODEL_PATH = "/mnt/ssd/models/rugpt3small_based_on_gpt2"
+# MODEL_PATH = "/mnt/ssd/models/rugpt3small_based_on_gpt2"
+MODEL_PATH = "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
 OUTPUT_FOLDER = "temp"
 CONTEXT_SIZE = 2048
 TOKENS_DATATYPE = np.int32
