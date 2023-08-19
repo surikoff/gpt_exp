@@ -11,12 +11,12 @@ class BooksStorage:
         self._min_doc_len = config.MIN_DOC_LENGTH
         self._tokens_datatype = config.TOKENS_DATATYPE
         self._tokens_datasize = config.TOKENS_DATASIZE
-        if erase_output_file and os.path.isfile(self._output_file):
-            os.remove(self._output_file)
-            self._length = 0
-        else:
-            self._length = os.path.getsize(self._output_file) // self._tokens_datasize
-        
+        self._length = 0
+        if os.path.isfile(self._output_file):
+            if erase_output_file:
+                os.remove(self._output_file)
+            else:
+                self._length = os.path.getsize(self._output_file) // self._tokens_datasize
 
     def from_txt_files(self, folder: str, encoding: str = "utf8"):
         num = 0
