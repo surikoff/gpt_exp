@@ -1,7 +1,6 @@
 import torch
 from train.gpt_trainer import GptTrainer
-from transformers import AutoModelForCausalLM
-from transformers import BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
 from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
 
 DEFAULT_BATCH_SIZE = 1
