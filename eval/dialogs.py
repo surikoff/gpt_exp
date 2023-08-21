@@ -5,7 +5,7 @@ from transformers import AutoTokenizer
 
 REQUEST_TAG = "Вопрос: "
 RESPONSE_TAG = "\nОтвет: "
-STOP_WORDS = [".", "\n"]
+STOP_WORDS = [".", "!", "?", "\n"]
 
 class Interaction:
     def __init__(self, request: str = None, response: str = None):

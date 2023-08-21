@@ -2,9 +2,9 @@ import numpy as np
 import torch
 
 
-# MODEL_PATH = "/users/surikov/models/rugpt3small_based_on_gpt2"
-MODEL_PATH = "/mnt/ssd/models/rugpt3small_based_on_gpt2"
-# MODEL_PATH = "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
+# BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
+# BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
+BASE_MODEL_DIR= "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
 OUTPUT_FOLDER = "temp"
 
 
@@ -29,7 +29,7 @@ BNB_4BIT_COMPUTE_DTYPE = torch.bfloat16
 
 
 TRAINING_CONFIG = {
-    "model_path": MODEL_PATH,
+    "model_path": BASE_MODEL_DIR,
     "batch_size": BATCH_SIZE,
     "output_folder": OUTPUT_FOLDER,
     "context_size": CONTEXT_SIZE,
