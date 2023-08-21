@@ -25,6 +25,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Script for training LLM models")
     parser.add_argument('data', type=str, help='Books data file path')
     parser.add_argument('output', type=str, help='Output dir for saving finetuned model')
+    parser.add_argument('--device', type=str, choices=["cpu", "gpu"], required=False, default="cpu", help='Training mode, default: native')
     parser.add_argument('--epochs', type=int, required=False, default=1, help='Number of training epochs')
     parser.add_argument('--mode', type=str, choices=["native", "lora"], required=False, default="native", help='Training mode, default: native')
     args = parser.parse_args()    

@@ -2,10 +2,9 @@ import torch
 import config
 from transformers import AutoTokenizer
 
-
 REQUEST_TAG = "Вопрос: "
 RESPONSE_TAG = "\nОтвет: "
-STOP_WORDS = [".", "!", "?", "\n"]
+
 
 class Interaction:
     def __init__(self, request: str = None, response: str = None):
@@ -26,9 +25,9 @@ class Interaction:
 
 
 class PromptGenerator:
-    def __init__(self, tokenizer: AutoTokenizer):
-        self._tokenizer = tokenizer
+    def __init__(self):        
         self._history = []
+        self._current_request = None
 
     @property
     def prompt(self):        
@@ -36,14 +35,7 @@ class PromptGenerator:
             raise Exception("The request field must been set to generate prompt")
         dialog = self.dialog_history
         prompt = dialog + str(Interaction(self._current_request))
-        return prompt.strip()
-    
-    @property
-    def prompt_ids(self):                
-        prompt_ids = self._tokenizer(self.prompt).input_ids
-        if len(prompt_ids) > config.CONTEXT_SIZE:
-            prompt_ids = prompt_ids[-config.CONTEXT_SIZE:]
-        return prompt_ids
+        return prompt.strip()    
 
     @property
     def dialog_history(self):
@@ -54,12 +46,13 @@ class PromptGenerator:
             dialog_text += str(interaction)
         return dialog_text
 
-
     def request(self, text: str):
         self._current_request = text
 
+    def response(self, text: str):
+        if self._current_request is not None:
+            self._history.append(Interaction(self._current_request, text))
+            self._current_request = None
+        else:
+            raise Exception("Attempting to generate an interaction without specifying a request")
 
-    def get_response(self, output: list[int]):
-        output_text = self._tokenizer.decode(output)        
-        response_position = output_text.rfind(RESPONSE_TAG) + len(RESPONSE_TAG)
-        return output_text[response_position:]

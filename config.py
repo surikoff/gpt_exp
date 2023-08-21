@@ -27,6 +27,10 @@ BNB_4BIT_QUANT_TYPE = "nf4"
 BNB_4BIT_USE_DOUBLE_QUANT = True
 BNB_4BIT_COMPUTE_DTYPE = torch.bfloat16
 
+# Parameters for evaluation
+STOP_WORDS = [".", "!", "?", "\n"]
+MAX_TOKENS = 100
+
 
 TRAINING_CONFIG = {
     "model_path": BASE_MODEL_DIR,
@@ -51,3 +55,9 @@ LORA_CONFIG = {
     "task_type": "CAUSAL_LM"
 }
 
+EVAL_CONFIG = {
+    "context_size": CONTEXT_SIZE,
+    "stop_words": STOP_WORDS,
+    "max_tokens": MAX_TOKENS
+
+}
