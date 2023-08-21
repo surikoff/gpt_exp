@@ -3,13 +3,21 @@ import argparse
 import transformers
 from eval.dialogs import PromptGenerator
 from config import BASE_MODEL_DIR, BNB_CONFIG, EVAL_CONFIG
-from constants import TRAIN_MODE
+from constants import EVAL_MODE
 from eval.generator import LLMGenerator
+from eval.generator_bnb import LLMGeneratorBNB
 
 
 def main(model_dir: str, mode: str):
     prompt_generator = PromptGenerator()
-    llm_generator = LLMGenerator(model_dir, **EVAL_CONFIG)
+    if mode == EVAL_MODE.BNB:
+        llm_generator = LLMGeneratorBNB(
+            model_dir, 
+            bnb_config = BNB_CONFIG,
+            **EVAL_CONFIG)
+    elif mode == EVAL_MODE.LORA:
+    else:
+        llm_generator = LLMGenerator(model_dir, **EVAL_CONFIG)
     while True:
         text = input("Input: ")
         prompt_generator.request(text)
@@ -28,12 +36,13 @@ if __name__ == '__main__':
     parser.add_argument(
         '--mode', 
         type=str, 
-        choices=list(TRAIN_MODE.__dict__.values()), 
+        choices=list(EVAL_MODE.__dict__.values()), 
         required=False, 
-        default=TRAIN_MODE.NATIVE, 
+        default=EVAL_MODE.NATIVE, 
         help='Evaluation mode, default: native')
     args = parser.parse_args()    
     
     main(args.model_dir, args.mode)
+
 
 
