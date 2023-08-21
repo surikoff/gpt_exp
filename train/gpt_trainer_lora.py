@@ -13,7 +13,7 @@ class GptTrainerLora(GptTrainer):
             self.config.model_path, 
             quantization_config =  BitsAndBytesConfig(**self.config.bnb_config), 
             torch_dtype = torch.float16, 
-            # device_map = "auto"
+            device_map = "auto"
         )
         model.config.use_cache=False
         model.gradient_checkpointing_enable()

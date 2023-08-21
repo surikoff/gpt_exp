@@ -3,13 +3,14 @@ from argparse import Namespace
 
 _TRAIN_MODES = {
     "NATIVE": "native",
-    "BNB": "bnb",
     "LORA": "lora"
 }
 TRAIN_MODE = Namespace(**_TRAIN_MODES)
 
-_DEVICES = {
-    "CPU": "cpu",
-    "GPU": "gpu"
+_EVAL_MODES = {
+    "NATIVE": "native",
+    "BNB": "bnb",
+    "LORA": "lora"
 }
-DEVICE = Namespace(**_DEVICES)
+EVAL_MODE = Namespace(**_EVAL_MODES)
+
