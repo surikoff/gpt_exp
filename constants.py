@@ -12,3 +12,4 @@ _DEVICES = {
     "CPU": "cpu",
     "GPU": "gpu"
 }
+DEVICE = Namespace(**_DEVICES)

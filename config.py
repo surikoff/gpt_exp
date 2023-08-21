@@ -1,12 +1,13 @@
 import numpy as np
 import torch
+from transformers import GenerationConfig
 
 
 # BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
 # BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
 BASE_MODEL_DIR= "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
 OUTPUT_FOLDER = "temp"
-
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Base parameters for LLM model training
 CONTEXT_SIZE = 2048
@@ -33,6 +34,7 @@ MAX_TOKENS = 100
 
 
 TRAINING_CONFIG = {
+    "device": DEVICE,
     "model_path": BASE_MODEL_DIR,
     "batch_size": BATCH_SIZE,
     "output_folder": OUTPUT_FOLDER,
@@ -56,8 +58,11 @@ LORA_CONFIG = {
 }
 
 EVAL_CONFIG = {
+    "device": DEVICE,
     "context_size": CONTEXT_SIZE,
     "stop_words": STOP_WORDS,
-    "max_tokens": MAX_TOKENS
-
+    "max_tokens": MAX_TOKENS,
+    "num_beams": 2,
+    "do_sample": True
 }
+

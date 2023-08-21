@@ -32,9 +32,9 @@ class PromptGenerator:
     @property
     def prompt(self):        
         if self._current_request is None:
-            raise Exception("The request field must been set to generate prompt")
+            raise Exception("The request method must been called before generate prompt")
         dialog = self.dialog_history
-        prompt = dialog + str(Interaction(self._current_request))
+        prompt = dialog + "\n" + str(Interaction(self._current_request))
         return prompt.strip()    
 
     @property
