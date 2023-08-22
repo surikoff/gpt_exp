@@ -1,12 +1,11 @@
 import argparse
-import sys
 from transformers import AutoTokenizer
 import config
 from books.storage import BooksStorage
 
 
 def main(books_folder: str, encoding: str, data_file: str):
-    tokenizer = AutoTokenizer.from_pretrained(config.MODEL_PATH)
+    tokenizer = AutoTokenizer.from_pretrained(config.BASE_MODEL_DIR)
     books_storage = BooksStorage(
         tokenizer, 
         data_file, 
