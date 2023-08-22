@@ -5,20 +5,20 @@ import torch
 # BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
 # BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
 BASE_MODEL_DIR= "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
-OUTPUT_FOLDER = "temp"
+# OUTPUT_FOLDER = "temp"
 DATA_TYPE = torch.float16
 
 # Base parameters for LLM model training
-CONTEXT_SIZE = 100
+CONTEXT_SIZE = 2048
 TOKENS_DATATYPE = np.int32
 TOKENS_DATASIZE = 4
 MIN_DOC_LENGTH = 100
-BATCH_SIZE = 2
+BATCH_SIZE = 10
 TEST_PART = 0.2
 
 # Parameters for the LoRA training module
 LORA_R = 8
-LORA_ALPHA = 8
+LORA_ALPHA = 16
 LORA_DROPOUT = 0.05
 
 # Parameters for the BitSandBytes quantization module
@@ -29,13 +29,14 @@ BNB_4BIT_COMPUTE_DTYPE = torch.bfloat16
 
 # Parameters for evaluation
 STOP_WORDS = [".", "!", "?", "\n"]
+# STOP_WORDS = ["\n"]
 MAX_TOKENS = 100
 
 
 TRAINING_CONFIG = {
     "model_path": BASE_MODEL_DIR,
+    "data_type": DATA_TYPE,
     "batch_size": BATCH_SIZE,
-    "output_folder": OUTPUT_FOLDER,
     "context_size": CONTEXT_SIZE,
     "test_part": TEST_PART,
 }
