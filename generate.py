@@ -1,11 +1,10 @@
-import torch
 import argparse
-import transformers
 from eval.dialogs import PromptGenerator
 from config import BASE_MODEL_DIR, BNB_CONFIG, EVAL_CONFIG
 from constants import EVAL_MODE
-from eval.generator import LLMGenerator
-from eval.generator_bnb import LLMGeneratorBNB
+from eval.llm_generator import LLMGenerator
+from eval.llm_generator_bnb import LLMGeneratorBNB
+from eval.llm_generator_lora import LLMGeneratorLora
 
 
 def main(model_dir: str, mode: str):
@@ -16,6 +15,10 @@ def main(model_dir: str, mode: str):
             bnb_config = BNB_CONFIG,
             **EVAL_CONFIG)
     elif mode == EVAL_MODE.LORA:
+        llm_generator = LLMGeneratorLora(
+            model_dir, 
+            bnb_config = BNB_CONFIG,
+            **EVAL_CONFIG)
     else:
         llm_generator = LLMGenerator(model_dir, **EVAL_CONFIG)
     while True:
@@ -46,3 +49,4 @@ if __name__ == '__main__':
 
 
 
+args.mode

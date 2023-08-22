@@ -1,5 +1,5 @@
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig
-from eval.generator import LLMGenerator
+from eval.llm_generator import LLMGenerator
 
 
 class LLMGeneratorBNB(LLMGenerator):
