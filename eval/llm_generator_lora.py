@@ -11,7 +11,7 @@ class LLMGeneratorLora(LLMGenerator):
         config = PeftConfig.from_pretrained(model_dir)           
         model = AutoModelForCausalLM.from_pretrained(
             config.base_model_name_or_path, 
-            quantization_config =  BitsAndBytesConfpesig(**self.config.bnb_config), 
+            quantization_config =  BitsAndBytesConfig(**self.config.bnb_config), 
             torch_dtype = self.config.data_type,
             device_map = "auto"
         )
