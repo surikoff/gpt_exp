@@ -15,7 +15,7 @@ class LLMTrainerLora(LLMTrainer):
             model = AutoModelForCausalLM.from_pretrained(
                 config.base_model_name_or_path, 
                 quantization_config =  BitsAndBytesConfig(**self.config.bnb_config), 
-                torch_dtype = self.config.data_type,
+                torch_dtype = self.config.model_dtype,
                 device_map = "auto"
             )
             model = PeftModel.from_pretrained(model, self.config.lora_weights)            
@@ -26,15 +26,17 @@ class LLMTrainerLora(LLMTrainer):
             model = AutoModelForCausalLM.from_pretrained(
                 self.config.model_path, 
                 quantization_config =  BitsAndBytesConfig(**self.config.bnb_config), 
-                torch_dtype = self.config.data_type,
+                torch_dtype = self.config.model_dtype,
                 device_map = "auto"
             )
+            
             model.config.use_cache=False
             model.gradient_checkpointing_enable()
             model = prepare_model_for_kbit_training(model)
-            model = get_peft_model(model, LoraConfig(**self.config.lora_config))
+            model = get_peft_model(model, self.config.lora_config)
+            
         
-        print_trainable_parameters(model)
+        print_trainable_parameters(model)        
         return model
 
 

@@ -8,22 +8,27 @@ from utils import duration_printer
 
 def main(data_file: str, dump_folder: str, num_train_epochs: int, mode: str, lora_weights: str = None):
     start_time = datetime.datetime.now()
-    if mode == TRAIN_MODE.LORA:
-        print("Trainer set to Lora mode...")
-        gpt_trainer = LLMTrainerLora(
-            data_file, 
-            dump_folder,
-            bnb_config = BNB_CONFIG, 
-            lora_config = LORA_CONFIG,
-            lora_weights = lora_weights,
-            **TRAINING_CONFIG,            
-        )
-        gpt_trainer.train(num_train_epochs)
+    if mode == TRAIN_MODE.LORA:        
+        for r in [1,4,16,32,64]:
+            for a in [4,16,32]:
+                print(f"Trainer set to Lora mode r={r} a={a}")
+                conf = dict(LORA_CONFIG)
+                conf["r"] = r
+                conf["lora_alpha"] = a
+                gpt_trainer = LLMTrainerLora(
+                    data_file, 
+                    f"{dump_folder}_r{r}_a{a}",
+                    bnb_config = BNB_CONFIG, 
+                    lora_config = conf,
+                    lora_weights = lora_weights,
+                    **TRAINING_CONFIG,            
+                )
+                gpt_trainer.train(num_train_epochs)
     else:
         gpt_trainer = LLMTrainer(data_file, dump_folder, **TRAINING_CONFIG)
         gpt_trainer.train(num_train_epochs)
     finish_time = datetime.datetime.now()     
-    gpt_trainer.save_model()
+    # gpt_trainer.save_model()
     duration_printer((finish_time-start_time).total_seconds())
 
 

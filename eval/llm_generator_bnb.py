@@ -10,7 +10,7 @@ class LLMGeneratorBNB(LLMGenerator):
         model = AutoModelForCausalLM.from_pretrained(
             model_dir,
             quantization_config =  BitsAndBytesConfig(**self.config.bnb_config), 
-            torch_dtype = self.config.data_type,
+            # torch_dtype = self.config.data_type,
             device_map = "auto"
         )
         return model

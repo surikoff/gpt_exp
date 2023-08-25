@@ -7,6 +7,7 @@ from transformers import AutoTokenizer
 class BooksStorage:
     def __init__(self, tokenizer: AutoTokenizer, output_file: str, erase_output_file: bool = False):
         self.tokenizer = tokenizer
+        self.eos_token_id = self.tokenizer.eos_token_id
         self._output_file = output_file
         self._min_doc_len = config.MIN_DOC_LENGTH
         self._tokens_datatype = config.TOKENS_DATATYPE
@@ -40,8 +41,9 @@ class BooksStorage:
         for part in text.split("\n"):
             if len(part) >= self._min_doc_len:
                 docs.append(part)
-        for doc_ids in self.tokenizer(docs, padding=False).input_ids:
-            self._write_to_output_file(doc_ids + [self.tokenizer.eos_token_id])
+        if len(docs) > 0:
+            for doc_ids in self.tokenizer(docs, padding=False).input_ids:
+                self._write_to_output_file(doc_ids + [self.eos_token_id])
 
     def _write_to_output_file(self, tokens: list):
         part = np.array(tokens, dtype=self._tokens_datatype)

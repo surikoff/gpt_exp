@@ -1,10 +1,8 @@
 import argparse
-from eval.dialogs import PromptGenerator
+from eval import PromptGenerator
 from config import BASE_MODEL_DIR, BNB_CONFIG, EVAL_CONFIG
 from constants import EVAL_MODE
-from eval.llm_generator import LLMGenerator
-from eval.llm_generator_bnb import LLMGeneratorBNB
-from eval.llm_generator_lora import LLMGeneratorLora
+from eval import LLMGenerator, LLMGeneratorBNB, LLMGeneratorLora
 
 
 def main(model_dir: str, mode: str):

@@ -1,7 +1,7 @@
 import argparse
 from transformers import AutoTokenizer
 import config
-from books.storage import BooksStorage
+from books import BooksStorage
 
 
 def main(books_folder: str, encoding: str, data_file: str):

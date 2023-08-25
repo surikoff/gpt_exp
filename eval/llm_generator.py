@@ -40,7 +40,6 @@ class LLMGenerator:
     def _init_model(self, model_dir: str) -> AutoModelForCausalLM:
         model = AutoModelForCausalLM.from_pretrained(
             model_dir,
-            torch_dtype = self.config.data_type,
             device_map = "auto"
         )
         return model

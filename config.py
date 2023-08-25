@@ -1,24 +1,29 @@
 import numpy as np
 import torch
+from peft import LoraConfig, TaskType
 
 
 # BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
 # BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
-BASE_MODEL_DIR= "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
-# OUTPUT_FOLDER = "temp"
-DATA_TYPE = torch.float16
+BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3medium_based_on_gpt2"
+# BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3large_based_on_gpt2"
+# BASE_MODEL_DIR = "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
+BASE_MODEL_DTYPE = torch.float32
+
 
 # Base parameters for LLM model training
-CONTEXT_SIZE = 2048
+CONTEXT_SIZE = 1024
 TOKENS_DATATYPE = np.int32
 TOKENS_DATASIZE = 4
 MIN_DOC_LENGTH = 100
-BATCH_SIZE = 2
-TEST_PART = 0.2
+TRAIN_BATCH_SIZE = 1
+EVAL_BATCH_SIZE = 1
+TEST_PART = 0.4
+LEARNING_RATE = 1e-4
 
 # Parameters for the LoRA training module
-LORA_R = 64
-LORA_ALPHA = 16
+LORA_R = 32
+LORA_ALPHA = 1
 LORA_DROPOUT = 0.05
 
 # Parameters for the BitSandBytes quantization module
@@ -35,8 +40,10 @@ MAX_TOKENS = 100
 
 TRAINING_CONFIG = {
     "model_path": BASE_MODEL_DIR,
-    "data_type": DATA_TYPE,
-    "batch_size": BATCH_SIZE,
+    "model_dtype": BASE_MODEL_DTYPE,
+    "learning_rate": LEARNING_RATE,
+    "train_batch_size": TRAIN_BATCH_SIZE,
+    "eval_batch_size": EVAL_BATCH_SIZE,
     "context_size": CONTEXT_SIZE,
     "test_part": TEST_PART,
 }
@@ -48,16 +55,16 @@ BNB_CONFIG = {
     "bnb_4bit_compute_dtype": BNB_4BIT_COMPUTE_DTYPE
 }
 
-LORA_CONFIG = {
-    "r": LORA_R, 
-    "lora_alpha": LORA_ALPHA,
-    "lora_dropout": 0.05,
-    "bias": "none",
-    "task_type": "CAUSAL_LM"
-}
+LORA_CONFIG = LoraConfig(
+    task_type = TaskType.CAUSAL_LM, 
+    inference_mode=False,
+    r = LORA_R, 
+    lora_alpha = LORA_ALPHA,
+    lora_dropout = LORA_DROPOUT,
+    # bias = "lora_only"
+)
 
 EVAL_CONFIG = {
-    "data_type": DATA_TYPE,
     "context_size": CONTEXT_SIZE,
     "stop_words": STOP_WORDS,
     "max_tokens": MAX_TOKENS,    
