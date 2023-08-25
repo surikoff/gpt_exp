@@ -15,10 +15,15 @@ class BooksDataset(torch.utils.data.Dataset):
         label_ids = [-100 if t == self._books_storage.eos_token_id else t for t in input_ids]
         attention_mask = [0 if t == self._books_storage.eos_token_id else 1 for t in input_ids]
         return {
-            "input_ids": torch.tensor(input_ids, dtype=torch.long),
-            "labels": torch.tensor(label_ids, dtype=torch.long),
-            "attention_mask": torch.tensor(attention_mask, dtype=torch.long)
+            "input_ids": input_ids,
+            "labels": label_ids,
+            "attention_mask": attention_mask
         }
+        # return {
+        #     "input_ids": torch.tensor(input_ids, dtype=torch.long),
+        #     "labels": torch.tensor(label_ids, dtype=torch.long),
+        #     "attention_mask": torch.tensor(attention_mask, dtype=torch.long)
+        # }
 
     def __len__(self):
         return len(self._indexes)

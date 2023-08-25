@@ -4,9 +4,9 @@ from peft import LoraConfig, TaskType
 
 
 # BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
-BASE_MODEL_DIR= "/users/surikov/models/rugpt3medium_based_on_gpt2"
+# BASE_MODEL_DIR= "/users/surikov/models/rugpt3medium_based_on_gpt2"
 # BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
-# BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3medium_based_on_gpt2"
+BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3medium_based_on_gpt2"
 # BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3large_based_on_gpt2"
 # BASE_MODEL_DIR = "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
 BASE_MODEL_DTYPE = torch.float32
