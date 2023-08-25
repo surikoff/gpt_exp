@@ -28,20 +28,20 @@ class LLMTrainer:
             "output_dir": os.path.join(self._dump_folder, "checkpoints"),
             "overwrite_output_dir": True,
             "learning_rate": self.config.learning_rate,
-            # "optim": "adafactor",
+            "optim": "adafactor",
             "logging_steps": 1,
-            # "gradient_accumulation_steps": 1,
-            # "gradient_checkpointing": True,
+            "gradient_accumulation_steps": 1,
+            "gradient_checkpointing": True,
             "evaluation_strategy": "epoch",
             "save_strategy": "epoch",
             "per_device_train_batch_size": self.config.train_batch_size,
             "per_device_eval_batch_size": self.config.eval_batch_size,
-            # "auto_find_batch_size": True,
+            "auto_find_batch_size": True,
             "load_best_model_at_end": True,
             "metric_for_best_model": "eval_loss",
             "greater_is_better": False,
             "save_total_limit": 10,
-            # "fp16": True,
+            "fp16": True,
             "disable_tqdm": True
         }
         
@@ -57,7 +57,7 @@ class LLMTrainer:
 
     def train(self, num_train_epochs: int):
         args = dict(self._training_args)
-        args.update({"num_train_epochs": num_train_epochs})
+        args.update({"num_train_epochs": num_train_epochs})        
         trainer = Trainer(
             model = self._model,
             args = TrainingArguments(**args),
