@@ -7,8 +7,6 @@ from transformers import TrainingArguments, Trainer, TrainerCallback
 from books.storage import BooksStorage
 from books.collector import BooksCollector
 
-DEFAULT_EPOCHS_NUMBER = 1
-
 
 class LLMTrainer:
     def __init__(self, data_file: str, dump_folder: str, **kwargs):
@@ -26,27 +24,26 @@ class LLMTrainer:
         self._model = self._init_model()
         print(f"Model initialized in {self._model.device} with {self._model.dtype} weights")
         self._printer = PrinterCallback(os.path.join(self._dump_folder, "train_log.json"))
-        self._training_args = TrainingArguments(
-            output_dir = os.path.join(self._dump_folder, "checkpoints"),
-            overwrite_output_dir = True,
-            learning_rate = self.config.learning_rate,
-            # optim="adafactor",
-            logging_steps = 1,
-            num_train_epochs = DEFAULT_EPOCHS_NUMBER,
-            # gradient_accumulation_steps = 1,
-            # gradient_checkpointing = True,
-            evaluation_strategy = "epoch",
-            save_strategy = "epoch",
-            per_device_train_batch_size = self.config.train_batch_size,
-            per_device_eval_batch_size  = self.config.eval_batch_size,
-            # auto_find_batch_size = True,
-            load_best_model_at_end = True,
-            metric_for_best_model = 'eval_loss',
-            greater_is_better = False,
-            save_total_limit = 10,
-            # fp16 = True,
-            disable_tqdm = True
-        )
+        self._training_args = {
+            "output_dir": os.path.join(self._dump_folder, "checkpoints"),
+            "overwrite_output_dir": True,
+            "learning_rate": self.config.learning_rate,
+            # "optim": "adafactor",
+            "logging_steps": 1,
+            # "gradient_accumulation_steps": 1,
+            # "gradient_checkpointing": True,
+            "evaluation_strategy": "epoch",
+            "save_strategy": "epoch",
+            "per_device_train_batch_size": self.config.train_batch_size,
+            "per_device_eval_batch_size": self.config.eval_batch_size,
+            # "auto_find_batch_size": True,
+            "load_best_model_at_end": True,
+            "metric_for_best_model": "eval_loss",
+            "greater_is_better": False,
+            "save_total_limit": 10,
+            # "fp16": True,
+            "disable_tqdm": True
+        }
         
 
     def _init_model(self):
@@ -59,10 +56,11 @@ class LLMTrainer:
         return model
 
     def train(self, num_train_epochs: int):
-        self._training_args.num_train_epochs = num_train_epochs
+        args = dict(self._training_args)
+        args.update({"num_train_epochs": num_train_epochs})
         trainer = Trainer(
             model = self._model,
-            args = self._training_args,
+            args = TrainingArguments(**args),
             train_dataset = self._train_dataset,
             eval_dataset = self._test_dataset,
             callbacks = [self._printer]
