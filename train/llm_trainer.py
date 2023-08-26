@@ -43,7 +43,7 @@ class LLMTrainer:
             "metric_for_best_model": "eval_loss",
             "greater_is_better": False,
             "save_total_limit": 10,
-            "fp16": True,
+            "fp16": self.config.train_in_fp16,
             "disable_tqdm": True
         }
         

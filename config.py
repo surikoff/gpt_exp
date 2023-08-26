@@ -12,6 +12,7 @@ from peft import LoraConfig, TaskType
 """
 
 SOURCE_MODELS_FOLDER = "/mnt/ssd/models"
+# SOURCE_MODELS_FOLDER = "../../models"
 BASE_MODEL_NAME = "rugpt3small_based_on_gpt2"
 
 BASE_MODEL_DIR= os.path.join(SOURCE_MODELS_FOLDER, BASE_MODEL_NAME)
@@ -19,6 +20,7 @@ BASE_MODEL_DTYPE = torch.float32
 
 
 # Base parameters for LLM model training
+FP16_MODE = True
 CONTEXT_SIZE = 1024
 TOKENS_DATATYPE = np.int32
 TOKENS_DATASIZE = 4
@@ -48,6 +50,7 @@ MAX_TOKENS = 100
 TRAINING_CONFIG = {
     "model_path": BASE_MODEL_DIR,
     "model_dtype": BASE_MODEL_DTYPE,
+    "train_in_fp16": FP16_MODE,
     "learning_rate": LEARNING_RATE,
     "train_batch_size": TRAIN_BATCH_SIZE,
     "eval_batch_size": EVAL_BATCH_SIZE,
