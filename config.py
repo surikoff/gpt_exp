@@ -1,14 +1,20 @@
 import numpy as np
 import torch
+import os
 from peft import LoraConfig, TaskType
 
 
-# BASE_MODEL_DIR= "/users/surikov/models/rugpt3small_based_on_gpt2"
-# BASE_MODEL_DIR= "/users/surikov/models/rugpt3medium_based_on_gpt2"
-# BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3small_based_on_gpt2"
-BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3medium_based_on_gpt2"
-# BASE_MODEL_DIR= "/mnt/ssd/models/rugpt3large_based_on_gpt2"
-# BASE_MODEL_DIR = "/mnt/ssd/models/ruGPT-3.5-13B-fp16"
+"""
+ Base GPT-type model, tested on: 
+ - rugpt3 {small/medium/large}
+ - ruGPT-3.5-13B
+ - mGPT 1.3b/13b
+"""
+
+SOURCE_MODELS_FOLDER = "/mnt/ssd/models"
+BASE_MODEL_NAME = "rugpt3large_based_on_gpt2"
+
+BASE_MODEL_DIR= os.path.join(SOURCE_MODELS_FOLDER, BASE_MODEL_NAME)
 BASE_MODEL_DTYPE = torch.float32
 
 
@@ -17,10 +23,10 @@ CONTEXT_SIZE = 1024
 TOKENS_DATATYPE = np.int32
 TOKENS_DATASIZE = 4
 MIN_DOC_LENGTH = 100
-TRAIN_BATCH_SIZE = 1
-EVAL_BATCH_SIZE = 1
+TRAIN_BATCH_SIZE = 16
+EVAL_BATCH_SIZE = 16
 TEST_PART = 0.4
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 5e-3  # 5e-4 for Lora and 5e-5 for ft
 
 # Parameters for the LoRA training module
 LORA_R = 32

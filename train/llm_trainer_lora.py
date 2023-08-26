@@ -18,6 +18,7 @@ class LLMTrainerLora(LLMTrainer):
                 torch_dtype = self.config.model_dtype,
                 device_map = "auto"
             )
+            model.resize_token_embeddings(len(self._tokenizer))
             model = PeftModel.from_pretrained(model, self.config.lora_weights)            
             model.config.use_cache=False
             model.gradient_checkpointing_enable()
@@ -29,12 +30,11 @@ class LLMTrainerLora(LLMTrainer):
                 torch_dtype = self.config.model_dtype,
                 device_map = "auto"
             )
-            
+            model.resize_token_embeddings(len(self._tokenizer))
             model.config.use_cache=False
             model.gradient_checkpointing_enable()
             model = prepare_model_for_kbit_training(model)
             model = get_peft_model(model, self.config.lora_config)
-            
         
         print_trainable_parameters(model)        
         return model

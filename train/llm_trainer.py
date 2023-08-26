@@ -34,8 +34,8 @@ class LLMTrainer:
             "gradient_checkpointing": True,
             "evaluation_strategy": "epoch",
             "save_strategy": "epoch",
-            "per_device_train_batch_size": self.config.train_batch_size,
-            "per_device_eval_batch_size": self.config.eval_batch_size,
+            # "per_device_train_batch_size": self.config.train_batch_size,
+            # "per_device_eval_batch_size": çself.config.eval_batch_size,
             "auto_find_batch_size": True,
             "load_best_model_at_end": True,
             "metric_for_best_model": "eval_loss",
@@ -52,6 +52,7 @@ class LLMTrainer:
             device_map = "auto",
             torch_dtype = self.config.model_dtype
         )
+        model.resize_token_embeddings(len(self._tokenizer))
         model.config.use_cache=False
         return model
 
