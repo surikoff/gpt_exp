@@ -3,9 +3,10 @@ import json
 import torch
 from argparse import Namespace
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from transformers import TrainingArguments, Trainer, TrainerCallback
+from transformers import TrainingArguments, Trainer
 from books.storage import BooksStorage
 from books.collector import BooksCollector
+from .utils import print_train_log, PrinterCallback
 
 
 class LLMTrainer:
@@ -23,7 +24,8 @@ class LLMTrainer:
         print(f"{len(self._train_dataset)} samples in train, {len(self._test_dataset)} samples in test")
         self._model = self._init_model()
         print(f"Model initialized in {self._model.device} with {self._model.dtype} weights")
-        self._printer = PrinterCallback(os.path.join(self._dump_folder, "train_log.json"))
+        self._log_file = os.path.join(self._dump_folder, "train_log.json")
+        self._printer = PrinterCallback(self._log_file)
         self._training_args = {
             "output_dir": os.path.join(self._dump_folder, "checkpoints"),
             "overwrite_output_dir": True,
@@ -66,8 +68,10 @@ class LLMTrainer:
             eval_dataset = self._test_dataset,
             callbacks = [self._printer]
         )
-        print("Pretraining evaluation:", trainer.evaluate())
-        trainer.train()        
+        # print("Pretraining evaluation:", trainer.evaluate())
+        trainer.train()
+        print_train_log(self._log_file, os.path.join(self._dump_folder, "train_log.png"))
+        
 
 
     def save_model(self):
@@ -76,12 +80,4 @@ class LLMTrainer:
         print(f"Fine-tuned model saved on {self._dump_folder}")
 
 
-class PrinterCallback(TrainerCallback):
-    def __init__(self, logfile: str):
-        self._logfile = logfile
-
-    def on_evaluate(self, args, state, control, **kwargs):
-        if state.is_local_process_zero:            
-            with open(self._logfile, "w") as f:
-                f.write(json.dumps(state.log_history))
             

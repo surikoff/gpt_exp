@@ -12,7 +12,7 @@ from peft import LoraConfig, TaskType
 """
 
 SOURCE_MODELS_FOLDER = "/mnt/ssd/models"
-BASE_MODEL_NAME = "rugpt3large_based_on_gpt2"
+BASE_MODEL_NAME = "rugpt3small_based_on_gpt2"
 
 BASE_MODEL_DIR= os.path.join(SOURCE_MODELS_FOLDER, BASE_MODEL_NAME)
 BASE_MODEL_DTYPE = torch.float32
@@ -26,7 +26,7 @@ MIN_DOC_LENGTH = 100
 TRAIN_BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 16
 TEST_PART = 0.4
-LEARNING_RATE = 5e-3  # 5e-4 for Lora and 5e-5 for ft
+LEARNING_RATE = 1e-3  # 5e-4 for Lora and 5e-5 for ft
 
 # Parameters for the LoRA training module
 LORA_R = 32
