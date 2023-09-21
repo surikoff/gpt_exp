@@ -1,13 +1,20 @@
 import argparse
 import datetime
-from config import TRAINING_CONFIG, BNB_CONFIG, LORA_CONFIG
+import os
+import wandb
+from config import TRAINING_CONFIG, BNB_CONFIG, LORA_CONFIG, WANDB_PROJECT, WANDB_KEY
 from constants import TRAIN_MODE
 from train import LLMTrainer, LLMTrainerLora
-from utils import duration_printer
+from utils import duration
 
 
 def main(data_file: str, dump_folder: str, num_train_epochs: int, mode: str, lora_weights: str = None):
+    os.environ["WANDB_PROJECT"] = WANDB_PROJECT
+    os.environ["WANDB_LOG_MODEL"] = "all"
+    wandb.login(key=WANDB_KEY)
+
     start_time = datetime.datetime.now()
+    print("Loading model from", TRAINING_CONFIG["model_path"])
     if mode == TRAIN_MODE.LORA:
         print("Trainer set to Lora mode...")
         gpt_trainer = LLMTrainerLora(
@@ -18,13 +25,17 @@ def main(data_file: str, dump_folder: str, num_train_epochs: int, mode: str, lor
             lora_weights = lora_weights,
             **TRAINING_CONFIG,            
         )
-        gpt_trainer.train(num_train_epochs)
     else:
         gpt_trainer = LLMTrainer(data_file, dump_folder, **TRAINING_CONFIG)
-        gpt_trainer.train(num_train_epochs)
     finish_time = datetime.datetime.now()     
+    print("Model loaded in", duration((finish_time-start_time).total_seconds()))
+    
+    start_time = datetime.datetime.now()
+    gpt_trainer.train(num_train_epochs)
+    finish_time = datetime.datetime.now()
+    print("Model has been trained in", duration((finish_time-start_time).total_seconds()))
+    wandb.finish()
     gpt_trainer.save_model()
-    duration_printer((finish_time-start_time).total_seconds())
 
 
 if __name__ == '__main__':    

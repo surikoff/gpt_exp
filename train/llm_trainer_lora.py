@@ -1,8 +1,7 @@
 import torch
 from train.llm_trainer import LLMTrainer
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig
-from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, PeftConfig, PeftModel
-
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, PeftConfig, PeftModel, TaskType
 DEFAULT_BATCH_SIZE = 1
 DEFAULT_TEST_PART = 0.2
 
@@ -34,7 +33,10 @@ class LLMTrainerLora(LLMTrainer):
             model.config.use_cache=False
             model.gradient_checkpointing_enable()
             model = prepare_model_for_kbit_training(model)
-            model = get_peft_model(model, self.config.lora_config)
+            model = get_peft_model(model, LoraConfig(
+                task_type = TaskType.CAUSAL_LM,
+                inference_mode = False, 
+                **self.config.lora_config))
         
         print_trainable_parameters(model)        
         return model

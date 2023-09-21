@@ -13,9 +13,9 @@ class PrinterCallback(TrainerCallback):
             with open(self._logfile, "w") as f:
                 f.write(json.dumps(state.log_history))
 
-    def on_step_end(self, args, state, control, **kwargs):
-        if state.global_step == 1:
-            control.should_evaluate = True
+    # def on_step_end(self, args, state, control, **kwargs):
+    #     if state.global_step == 1:
+    #         control.should_evaluate = True
 
                 
 
